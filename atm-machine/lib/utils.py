@@ -1,4 +1,5 @@
 import random
+import crud
 
 def genPin():
     pin = ""
@@ -6,3 +7,15 @@ def genPin():
         pin += str(random.randint(0,9))
 
     return pin
+
+def location(acc_no):
+
+    for user in crud.accounts:
+        if user.accno == acc_no:
+            return user
+
+    return -1
+
+
+
+

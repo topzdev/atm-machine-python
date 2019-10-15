@@ -1,4 +1,5 @@
 from register import registerMenu
+from atm import login
 users = []
 
 
@@ -15,7 +16,7 @@ def main():
         registerMenu()
 
     elif choosen == "2":
-        pass
+        login()
 
     elif choosen == "3":
         exit(0)

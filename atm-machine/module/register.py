@@ -42,7 +42,11 @@ def registerInput():
     print("Account number: ", acc_no)
     print("Account Pin number: ", pin)
 
-    crud.insert(user(fname, mname, lname, email, contact, balance, acc_no, pin))
+    if crud.insert(user(fname, mname, lname, email, contact, balance, acc_no, pin)):
+        crud.save()
+        print("User successfully saved")
+
+
 
 
 def choosePlan():
