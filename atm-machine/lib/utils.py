@@ -20,6 +20,10 @@ def location(acc_no):
 
     return -1
 
+def get_user(acc_no):
+    acc_no = location(acc_no)
+    return crud.accounts[acc_no]
+
 def is_minimum(amount):
     return 1 if amount < config.MIN_TRANSACTION else 0
 
@@ -41,9 +45,8 @@ def ask_continue():
         ask_continue()
 
 def set_message(msg ,func):
-    print(msg)
-    print("Press any key to continue...")
-    input("")
+    if msg != "": print(msg)
+    input("Press any key to continue...")
     system("cls")
     func()
 

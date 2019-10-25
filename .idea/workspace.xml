@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="11948f19-66b0-455e-9354-181b16e93476" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/atm-machine/lib/Bycrypt.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/atm-machine/lib/card_detect.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/atm-machine/lib/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/atm-machine/lib/transaction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/atm-machine/lib/input.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/atm-machine/lib/view.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atm-machine/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/atm-machine/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atm-machine/database.txt" beforeDir="false" afterPath="$PROJECT_DIR$/atm-machine/database.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/atm-machine/lib/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/atm-machine/lib/crud.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/atm-machine/lib/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/atm-machine/lib/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atm-machine/model/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/atm-machine/model/User.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/atm-machine/module/atm.py" beforeDir="false" afterPath="$PROJECT_DIR$/atm-machine/module/atm.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -56,7 +54,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.__init__ (1)">
+  <component name="RunManager" selected="Python.input">
     <configuration name="Bycrypt" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="oop-proj" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -141,7 +139,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="crud" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="input" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="oop-proj" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -153,22 +151,29 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/atm-machine/lib/crud.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/atm-machine/lib/input.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="EMULATE_TERMINAL" value="true" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.__init__" />
+      <item itemvalue="Python.__init__ (1)" />
+      <item itemvalue="Python.Bycrypt" />
+      <item itemvalue="Python.card_detect" />
+      <item itemvalue="Python.input" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.input" />
         <item itemvalue="Python.__init__ (1)" />
         <item itemvalue="Python.card_detect" />
         <item itemvalue="Python.Bycrypt" />
         <item itemvalue="Python.__init__" />
-        <item itemvalue="Python.crud" />
       </list>
     </recent_temporary>
   </component>

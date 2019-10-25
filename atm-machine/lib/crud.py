@@ -28,8 +28,9 @@ def display():
 def save():
     global accounts
     with open("database.txt", 'w') as file:
+        print(accounts)
         for account in accounts:
-            file.write(account.fname+' '+account.mname+' '+account.lname+' '+account.email+' '+account.contact+' '+str(account.balance)+' '+account.accno+' '+account.pin)
+            file.write(account.fname+' '+account.mname+' '+account.lname+' '+account.email+' '+account.contact+' '+str(account.balance)+' '+account.accno+' '+account.pin + '\n')
 
 def retrieve():
     global accounts

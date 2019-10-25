@@ -2,6 +2,7 @@ import utils
 from User import User
 import config
 import crud
+import view
 active = User("","","","","","",0,"")
 
 def login():
@@ -48,7 +49,7 @@ def registerMenu():
     elif choosen == "4":
         fund_transfer()
     elif choosen == "5":
-        setting
+        setting()
     elif choosen == "6":
         login()
 
@@ -57,24 +58,25 @@ def view_balance():
     print("CURRENT BALANCE")
     print("===========================================================================================")
     print("Your Current Balance: Php", active.balance)
-    utils.set_message("", registerMenu())
+    utils.set_message("", registerMenu)
 
 
 def deposit():
     print("DEPOSIT")
     print("===========================================================================================")
     print("Your Current Balance: Php", active.balance)
-    deposit = float(input("Enter amount to deposit: Php "))
+    deposit_amt = float(input("Enter amount to deposit: Php "))
 
     utils.ask_continue()
-    if utils.is_minimum(deposit):
-        utils.set_message("The minimum amount to deposit is 500", deposit())
-    elif utils.is_maximum(deposit):
-        utils.set_message("The maximum amount to deposit is 500", deposit())
+    if utils.is_minimum(deposit_amt):
+        utils.set_message("The minimum amount to deposit is {}, Please try again".format(config.MIN_TRANSACTION), deposit)
+    elif utils.is_maximum(deposit_amt):
+        utils.set_message("The maximum amount to deposit is {}, Please try again".format(config.MAX_TRANSACTION), deposit)
     else:
-        active.balance += deposit
-    if crud.update_balance(active.accno, active.balance):
-        utils.set_message("The amount successfully deposited to your account", registerMenu())
+        active.balance += deposit_amt
+        if crud.update_balance(active.accno, active.balance):
+            view.receipt(active,"1","",deposit_amt)
+            registerMenu()
 
 
 
@@ -82,45 +84,47 @@ def widthdraw():
     print("WIDTHDRAW")
     print("===========================================================================================")
     print("Your Current Balance: Php", active.balance)
-    widthdraw = float(input("Enter amount to widthdraw : Php "))
+    widthdraw_amt = float(input("Enter amount to widthdraw : Php "))
 
     utils.ask_continue()
-    if utils.is_minimum(widthdraw):
-        utils.set_message("The minimum amount to widthraw is 500", widthdraw())
-    elif utils.is_maximum(widthdraw):
-        utils.set_message("The maximum amount to widthraw is 500", widthdraw())
+    if utils.is_minimum(widthdraw_amt):
+        utils.set_message("The minimum amount to widthraw is {}, Please try again".format(config.MIN_TRANSACTION), widthdraw)
+    elif utils.is_maximum(widthdraw_amt):
+        utils.set_message("The maximum amount to widthraw is {}, Please try again".format(config.MAX_TRANSACTION), widthdraw)
     else:
-        active.balance -= widthdraw
+        active.balance -= widthdraw_amt
 
     if crud.update_balance(active.accno, active.balance):
-        utils.set_message("Amount successfully widthdraw", registerMenu())
+        view.receipt(active, "2","",widthdraw_amt)
+        registerMenu()
 
 
 
 def fund_transfer():
-    print("WIDTHDRAW")
+    print("FUND TRANSFER")
     print("===========================================================================================")
     print("Your Current Balance: Php", active.balance)
     res_acc = input("Enter the Account Number of the reciever of money transfer :")
-    amount = float(input("Enter the amount to transfer: Php "))
-
     res = utils.location(res_acc)
-    res = crud.accounts[res]
-    utils.ask_continue()
-    if res:
-       if utils.is_minimum(widthdraw):
-           utils.set_message("The minimum amount to transfer is Php " + str(config.MIN_TRANSACTION), fund_transfer())
-       elif utils.is_maximum(widthdraw):
-           utils.set_message("The maximum amount to transfer is Php "+ str(config.MAX_TRANSACTION), fund_transfer())
-       else:
+    if res != -1:
+        amount = float(input("Enter the amount to transfer: Php "))
+        res = crud.accounts[res]
+        print(res)
+        utils.ask_continue()
+        if utils.is_minimum(amount):
+            utils.set_message("The minimum amount to transfer is Php {}, Please try again".format(config.MIN_TRANSACTION), fund_transfer)
+        elif utils.is_maximum(amount):
+            utils.set_message("The maximum amount to transfer is Php {}, Please try again".format(config.MAX_TRANSACTION), fund_transfer)
+        else:
            res_amount = res.balance + amount
            act_amount = active.balance - amount
 
-       if crud.update_balance(res_acc, res_amount) and crud.update_balance(active.accno, act_amount):
-           utils.set_message("Amount successfully transfered to " + res.get_fullname() + " amount of Php ", fund_transfer())
+           if crud.update_balance(res_acc, res_amount) and crud.update_balance(active.accno, act_amount):
+               view.receipt(active,"3","",amount)
+               registerMenu()
 
     else:
-        utils.set_message("The Account Number of the reciever not found, please try again..", fund_transfer())
+        utils.set_message("The Account Number of the reciever not found, please try again..", fund_transfer)
 
 
 def setting():
@@ -146,11 +150,11 @@ def change_pin():
         re_pin = input("Enter the re-enter pin: ")
 
         if new_pin == re_pin and crud.update_pin(active.accno, new_pin):
-            utils.set_message("Pin successfully changed", registerMenu())
+            utils.set_message("Pin successfully changed", registerMenu)
         else:
-            utils.set_message("Pin not match, please try again..", change_pin())
+            utils.set_message("Pin not match, please try again..", change_pin)
     else:
-        utils.set_message("Your inputted pin not match with your current pin, please try again..", change_pin())
+        utils.set_message("Your inputted pin not match with your current pin, please try again..", change_pin)
 
 
 
