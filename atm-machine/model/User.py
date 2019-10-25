@@ -9,5 +9,7 @@ class User:
         self.pin = pin
         self.balance = balance
 
+    def get_fullname(self):
+        return '{} {} {}'.format(self.fname, self.mname, self.lname)
 
 
