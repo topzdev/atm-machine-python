@@ -1,5 +1,5 @@
 from register import registerMenu
-from atm import login
+from atm import card_verify
 users = []
 
 
@@ -17,7 +17,7 @@ def main():
         registerMenu()
 
     elif choosen == "2":
-        login()
+        card_verify()
 
     elif choosen == "3":
         exit(0)

@@ -17,3 +17,10 @@ def decrpyt(pin):
 
 def change_char(s, p, r):
     return s[:p]+r+s[p+1:]
+
+#
+# pin = encrypt("123456")
+# print(pin)
+#
+pin = decrpyt("~vv|}{")
+print(pin)

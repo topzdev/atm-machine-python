@@ -1,6 +1,8 @@
 from User import User
 from _ccgen import completed_number
-from utils import genPin
+from utils import genPin, set_message
+from card_detect import check_removable, is_card_exist
+from Bycrypt import decrpyt,encrypt
 import crud
 
 def registerMenu():
@@ -22,9 +24,17 @@ def registerMenu():
         exit(0)
 
 
+def register_card():
+    drive = check_removable("1")
+
+    if is_card_exist(drive):
+        set_message("Card you inserted is already member, Please try another card thank you! ", registerMenu)
+    else:
+        return drive
+
 
 def registerInput():
-
+    drive_path = register_card()
     user = User
     print("Register Account")
     print( "Personal Information")
@@ -42,10 +52,10 @@ def registerInput():
     print("Account number: ", acc_no)
     print("Account Pin number: ", pin)
 
-    if crud.insert(user(fname, mname, lname, email, contact, balance, acc_no, pin)):
+    if crud.insert(user(fname, mname, lname, email, contact, balance, acc_no, encrypt(pin))):
         crud.save()
+        crud.save_to_card(drive_path,acc_no)
         print("User successfully saved")
-
 
 
 

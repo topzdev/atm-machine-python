@@ -1,5 +1,8 @@
 from User import User
 import utils
+import config
+import card_detect
+import os
 accounts = []
 
 def insert(data):
@@ -41,5 +44,15 @@ def retrieve():
             insert(User(line[0], line[1], line[2], line[3], line[4], float(line[5]), line[6], line[7].strip()))
 
 
+def save_to_card(path, acc_no):
+    with open(path+":\\"+config.CMPY_SHORT+".txt",'w') as file:
+        file.write(acc_no)
 
-
+def get_card_number(path):
+    with open(path + ":\\" + config.CMPY_SHORT + ".txt", 'r') as file:
+        return file.readline()
+    # print(card_detect.is_card_exist(path))
+    # if card_detect.is_card_exist(path):
+    #     print("existing beh")
+    #     with open(path+":\\"+config.CMPY_SHORT+".txt",'r') as file:
+    #         return file.readline()

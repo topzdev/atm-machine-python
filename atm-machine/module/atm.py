@@ -3,14 +3,36 @@ from User import User
 import config
 import crud
 import view
+import card_detect
+from Bycrypt import decrpyt
+from os import system
 active = User("","","","","","",0,"")
 
-def login():
-    global active
+
+def card_verify():
     crud.retrieve()
+    drive = card_detect.check_removable("1")
+    acc_no = crud.get_card_number(drive)
+    print(drive,acc_no, str(utils.location(acc_no)))
+    if utils.location(acc_no) != -1:
+        login(acc_no)
+    else:
+        utils.set_message("Card has not been registered, Please register first the card...", card_verify)
+
+
+def ask_remove_card():
+    system("cls")
+    print("Please remove your card")
+    if card_detect.check_removable("2") != 0:
+        card_verify()
+
+
+
+def login(acc_no):
+    global active
+    print("Account number is ", acc_no)
     print("Login")
     print("===========================================")
-    acc_no = input("Enter your acconut number: ")
     pin = input("Enter your pin: ")
 
     user = utils.location(acc_no)
@@ -18,7 +40,7 @@ def login():
     print(user)
     if user != -1:
         print(user.pin)
-        if str(user.pin) == str(pin):
+        if decrpyt(user.pin) == str(pin):
             active = user
             registerMenu()
         else:
@@ -76,7 +98,7 @@ def deposit():
         active.balance += deposit_amt
         if crud.update_balance(active.accno, active.balance):
             view.receipt(active,"1","",deposit_amt)
-            registerMenu()
+            ask_remove_card()
 
 
 
@@ -96,7 +118,7 @@ def widthdraw():
 
     if crud.update_balance(active.accno, active.balance):
         view.receipt(active, "2","",widthdraw_amt)
-        registerMenu()
+        ask_remove_card()
 
 
 
@@ -121,7 +143,7 @@ def fund_transfer():
 
            if crud.update_balance(res_acc, res_amount) and crud.update_balance(active.accno, act_amount):
                view.receipt(active,"3","",amount)
-               registerMenu()
+               ask_remove_card()
 
     else:
         utils.set_message("The Account Number of the reciever not found, please try again..", fund_transfer)
@@ -150,7 +172,7 @@ def change_pin():
         re_pin = input("Enter the re-enter pin: ")
 
         if new_pin == re_pin and crud.update_pin(active.accno, new_pin):
-            utils.set_message("Pin successfully changed", registerMenu)
+            utils.set_message("Pin successfully changed", ask_remove_card)
         else:
             utils.set_message("Pin not match, please try again..", change_pin)
     else:
