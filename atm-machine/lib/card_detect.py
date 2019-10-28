@@ -16,7 +16,7 @@ def get_driveStatus():
 def detect_device():
     original = set(get_driveStatus())
     print('Please insert or re-insert your card...')
-    time.sleep(3)
+    time.sleep(2)
     add_device = set(get_driveStatus()) - original
     if (len(add_device)):
         # print("There were %d" % (len(add_device)))
@@ -29,7 +29,7 @@ def detect_device():
 def detect_remove():
     original = set(get_driveStatus())
     print('Please remove your card...')
-    time.sleep(3)
+    time.sleep(2)
     subt_device = original - set(get_driveStatus())
     if (len(subt_device)):
         for drive in subt_device:
@@ -52,14 +52,6 @@ def check_removable(mode):
 
 
 def is_card_exist(drive):
-    print(drive, drive+"\\:"+config.FILE_NAME)
-    print(os.path.exists(drive+"\\:"+config.FILE_NAME))
-    if os.path.exists(drive+"\\:"+config.FILE_NAME):
-        return 1
-    else:
-        return 0
-    # return 1 if os.path.exists(drive+"\\:"+config.FILE_NAME) else 0
-
-
+    return 1 if os.path.exists(drive+":\\"+config.FILE_NAME) else 0
 
 

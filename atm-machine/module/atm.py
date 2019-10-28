@@ -6,14 +6,14 @@ import view
 import card_detect
 from Bycrypt import decrpyt
 from os import system
-active = User("","","","","","",0,"")
+active = User("","","","","",0,"","")
 
 
 def card_verify():
     crud.retrieve()
     drive = card_detect.check_removable("1")
     acc_no = crud.get_card_number(drive)
-    print(drive,acc_no, str(utils.location(acc_no)))
+    print(drive, acc_no, utils.location(acc_no))
     if utils.location(acc_no) != -1:
         login(acc_no)
     else:
@@ -30,16 +30,11 @@ def ask_remove_card():
 
 def login(acc_no):
     global active
-    print("Account number is ", acc_no)
-    print("Login")
-    print("===========================================")
+    view.logo()
     pin = input("Enter your pin: ")
-
     user = utils.location(acc_no)
-    user = crud.accounts[user]
-    print(user)
     if user != -1:
-        print(user.pin)
+        user = crud.accounts[user]
         if decrpyt(user.pin) == str(pin):
             active = user
             registerMenu()
@@ -52,40 +47,43 @@ def login(acc_no):
 
 
 def registerMenu():
-
-    print("Choose module to enter")
-    print("[1] View Balance")
+    view.header("MAIN MENU", active.get_fullname())
+    print("[1] Balance Inquiry")
     print("[2] Deposit")
-    print("[3] Widthraw")
-    print("[4] Fund Transfer")
-    print("[5] Setting")
-    print("[6] End of Transaction")
-    choosen = input("Choice: ")
+    print("[3] Quick Cash")
+    print("[4] Widthdraw")
+    print("[5] Fund Transfer")
+    print("[6] Setting")
+    print("[7] End of Transaction")
+    choosen = input("Choice>>> ")
 
     if choosen == "1":
         view_balance()
     elif choosen == "2":
         deposit()
     elif choosen == "3":
-        widthdraw()
+        quick_cash()
     elif choosen == "4":
-        fund_transfer()
+        widthdraw()
     elif choosen == "5":
-        setting()
+        fund_transfer()
     elif choosen == "6":
+        setting()
+    elif choosen == "7":
         login()
+    else:
+        utils.set_message("Invalid input please try again...", registerMenu)
 
 
 def view_balance():
-    print("CURRENT BALANCE")
-    print("===========================================================================================")
+    view.header("BALANCE INQUIRY",active.get_fullname())
     print("Your Current Balance: Php", active.balance)
-    utils.set_message("", registerMenu)
+    utils.ask_continue()
+    ask_remove_card()
 
 
 def deposit():
-    print("DEPOSIT")
-    print("===========================================================================================")
+    view.header("DEPOSIT", active.get_fullname())
     print("Your Current Balance: Php", active.balance)
     deposit_amt = float(input("Enter amount to deposit: Php "))
 
@@ -103,53 +101,86 @@ def deposit():
 
 
 def widthdraw():
-    print("WIDTHDRAW")
-    print("===========================================================================================")
+    view.header("WIDTHDRAW", active.get_fullname())
     print("Your Current Balance: Php", active.balance)
     widthdraw_amt = float(input("Enter amount to widthdraw : Php "))
 
     utils.ask_continue()
-    if utils.is_minimum(widthdraw_amt):
-        utils.set_message("The minimum amount to widthraw is {}, Please try again".format(config.MIN_TRANSACTION), widthdraw)
-    elif utils.is_maximum(widthdraw_amt):
-        utils.set_message("The maximum amount to widthraw is {}, Please try again".format(config.MAX_TRANSACTION), widthdraw)
+    if utils.is_sufficient(active.balance, widthdraw_amt):
+        if utils.is_minimum(widthdraw_amt):
+            utils.set_message("The minimum amount to widthraw is {}, Please try again".format(config.MIN_TRANSACTION), widthdraw)
+        elif utils.is_maximum(widthdraw_amt):
+            utils.set_message("The maximum amount to widthraw is {}, Please try again".format(config.MAX_TRANSACTION), widthdraw)
+        else:
+            active.balance -= widthdraw_amt
+            if crud.update_balance(active.accno, active.balance):
+                view.receipt(active, "2", "", widthdraw_amt)
+                ask_remove_card()
     else:
-        active.balance -= widthdraw_amt
-
-    if crud.update_balance(active.accno, active.balance):
-        view.receipt(active, "2","",widthdraw_amt)
-        ask_remove_card()
+        utils.set_message("Insufficient balance, Please try again", widthdraw)
 
 
+def quick_cash():
+    view.header("QUICK CASH", active.get_fullname())
+    print("[1] 500  [2] 1000    [3] 2000    [4] 3000    [4] 10,000")
+    chosen = input("Enter chosen number >>>")
+    cash = 0
+    if chosen == "1":
+        cash = 500
+    elif chosen == "2":
+        cash = 1000
+    elif chosen == "3":
+        cash = 2000
+    elif chosen == "4":
+        cash = 3000
+    elif chosen == "5":
+        cash = 10000
+    else:
+        utils.set_message("Invalid chosen input, please try again...", quick_cash)
+
+    print("The amount you want to widthraw is {}".format(cash))
+    utils.ask_continue()
+    if utils.is_sufficient(active.balance, cash):
+        active.balance -= cash
+        if crud.update_balance(active.accno, active.balance):
+            view.receipt(active, "2","",cash)
+            ask_remove_card()
+    else:
+        utils.set_message("Insufficient balance, Please try again", quick_cash)
 
 def fund_transfer():
-    print("FUND TRANSFER")
-    print("===========================================================================================")
+    view.header("FUND TRANSFER", active.get_fullname())
     print("Your Current Balance: Php", active.balance)
     res_acc = input("Enter the Account Number of the reciever of money transfer :")
     res = utils.location(res_acc)
     if res != -1:
         amount = float(input("Enter the amount to transfer: Php "))
         res = crud.accounts[res]
-        print(res)
         utils.ask_continue()
-        if utils.is_minimum(amount):
-            utils.set_message("The minimum amount to transfer is Php {}, Please try again".format(config.MIN_TRANSACTION), fund_transfer)
-        elif utils.is_maximum(amount):
-            utils.set_message("The maximum amount to transfer is Php {}, Please try again".format(config.MAX_TRANSACTION), fund_transfer)
+        if utils.is_sufficient(active.balance, amount):
+            if utils.is_minimum(amount):
+                utils.set_message(
+                    "The minimum amount to transfer is Php {}, Please try again".format(config.MIN_TRANSACTION),
+                    fund_transfer)
+            elif utils.is_maximum(amount):
+                utils.set_message(
+                    "The maximum amount to transfer is Php {}, Please try again".format(config.MAX_TRANSACTION),
+                    fund_transfer)
+            else:
+                res_amount = res.balance + amount
+                act_amount = active.balance - amount
+
+                if crud.update_balance(res_acc, res_amount) and crud.update_balance(active.accno, act_amount):
+                    view.receipt(active, "3", res_acc, amount)
+                    ask_remove_card()
         else:
-           res_amount = res.balance + amount
-           act_amount = active.balance - amount
-
-           if crud.update_balance(res_acc, res_amount) and crud.update_balance(active.accno, act_amount):
-               view.receipt(active,"3","",amount)
-               ask_remove_card()
-
+            utils.set_message("Insufficient balance, Please try again", fund_transfer)
     else:
-        utils.set_message("The Account Number of the reciever not found, please try again..", fund_transfer)
+        utils.set_message("The Account Number of the receiver not found, please try again..", fund_transfer)
 
 
 def setting():
+    view.header("SETTING", active.get_fullname())
     print("Choose module to enter")
     print("[1] Change Password")
     print("[2] Back")
@@ -162,12 +193,11 @@ def setting():
 
 
 def change_pin():
-    print("CHANGE PIN")
-    print("===========================================================================================")
+    view.header("CHANGE PIN", active.get_fullname())
     cur_pin = input("Enter the current pin: ")
 
     utils.ask_continue()
-    if cur_pin == active.pin:
+    if cur_pin == decrpyt(active.pin):
         new_pin = input("Enter the new pin: ")
         re_pin = input("Enter the re-enter pin: ")
 

@@ -24,6 +24,9 @@ def get_user(acc_no):
     acc_no = location(acc_no)
     return crud.accounts[acc_no]
 
+def is_sufficient(balance,amount):
+    return 1 if balance > (amount + config.MIN_TRANSACTION) else 0
+
 def is_minimum(amount):
     return 1 if amount < config.MIN_TRANSACTION else 0
 

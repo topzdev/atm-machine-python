@@ -2,11 +2,11 @@ from User import User
 from _ccgen import completed_number
 from utils import genPin, set_message
 from card_detect import check_removable, is_card_exist
-from Bycrypt import decrpyt,encrypt
-import crud
+from Bycrypt import encrypt
+import crud, view
 
 def registerMenu():
-
+    view.logo()
     crud.retrieve()
     print("Choose module to enter")
     print("[1] Register User")
@@ -17,7 +17,6 @@ def registerMenu():
 
     if choosen == "1":
         registerInput()
-
     elif choosen == "2":
         showUsers()
     elif choosen == "3":
@@ -55,7 +54,9 @@ def registerInput():
     if crud.insert(user(fname, mname, lname, email, contact, balance, acc_no, encrypt(pin))):
         crud.save()
         crud.save_to_card(drive_path,acc_no)
-        print("User successfully saved")
+        set_message("User successfully saved",registerMenu)
+
+
 
 
 
@@ -86,6 +87,8 @@ def choosePlan():
 
 
 def showUsers():
+    print("Account Registered")
+    print("============================================================")
     crud.display()
     print("End of line")
     input('Press any key...')
