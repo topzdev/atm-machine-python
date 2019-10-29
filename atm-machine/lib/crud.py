@@ -28,7 +28,7 @@ def update_pin(acc_no, pin):
 def display():
     global  accounts
     for account in accounts:
-        print("{} {} {} {} {} {} {} {}".format(account.fname, account.mname,account.lname,account.email,account.contact,account.balance,account.accno,account.pin))
+        print("{} {} {} {} {} {} {} {}".format(account.fname, account.mname,account.lname,account.email,account.contact,account.balance,account.accno,""))
         # print(account.fname+' '+account.mname+' '+account.lname+' '+account.email+' '+account.contact+' '+account.balance+' '+account.accno+' '+account.pin)
 
 def save():

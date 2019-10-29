@@ -35,9 +35,7 @@ def register_card():
 def registerInput():
     drive_path = register_card()
     user = User
-    print("Register Account")
-    print( "Personal Information")
-    print( "=======================================================")
+    view.header("Register Account", "Personal Information")
     fname = input("Enter your First Name: ")
     mname = input("Enter your Middle Name: ")
     lname = input("Enter your Last Name: ")
@@ -87,8 +85,7 @@ def choosePlan():
 
 
 def showUsers():
-    print("Account Registered")
-    print("============================================================")
+    view.header("Registered Account", "Showing the Accounts")
     crud.display()
     print("End of line")
     input('Press any key...')

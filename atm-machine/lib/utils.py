@@ -38,7 +38,7 @@ def ask_continue():
     print("[1] Continue")
     print("[2] Discard")
     choice = input("Enter your choice : ")
-
+    print("=====================================================================")
     if choice == "1":
         pass
     elif choice == "2":

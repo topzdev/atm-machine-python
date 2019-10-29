@@ -25,5 +25,5 @@ def change_char(s, p, r):
 # print(pin)
 #
 #
-# pin = decrpyt("}x}||}")
-# print((pin))
+pin = decrpyt("xv{z{|")
+print((pin))

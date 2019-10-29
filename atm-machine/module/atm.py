@@ -1,19 +1,17 @@
-import utils
+import utils,card_detect, config,crud, view, input as inp
 from User import User
-import config
-import crud
-import view
-import card_detect
 from Bycrypt import decrpyt
 from os import system
-active = User("","","","","",0,"","")
-
+from time import sleep
+import getpass
+active = User
+attempts = 0
 
 def card_verify():
     crud.retrieve()
     drive = card_detect.check_removable("1")
     acc_no = crud.get_card_number(drive)
-    print(drive, acc_no, utils.location(acc_no))
+    # print(drive, acc_no, utils.location(acc_no))
     if utils.location(acc_no) != -1:
         login(acc_no)
     else:
@@ -27,11 +25,11 @@ def ask_remove_card():
         card_verify()
 
 
-
 def login(acc_no):
     global active
     view.logo()
-    pin = input("Enter your pin: ")
+    # pin = getpass.getpass(prompt='Enter your pin: ')
+    pin = inp.pin_getter()
     user = utils.location(acc_no)
     if user != -1:
         user = crud.accounts[user]
@@ -39,10 +37,52 @@ def login(acc_no):
             active = user
             registerMenu()
         else:
-            print("Wrong Pin!")
+            print("\n")
+            attemps_count(acc_no)
 
     else:
         print("Account number not exist!")
+
+def trans_verify(func_call):
+    view.logo()
+    pin = inp.pin_getter()
+    global active
+    if decrpyt(active.pin) == str(pin):
+        func_call()
+    else:
+        utils.set_message("Wrong pin", registerMenu)
+
+
+
+def attemps_count(acc_no):
+    global attempts
+    attempts += 1
+    timer = 0
+    message = ""
+    if(attempts >=2 and attempts <=4):
+        message = "Wrong pin, {} attemps you made, wait till ".format(attempts)
+        # print("{} attemps you made, wait till ".format(attempts))
+        timer = 60
+    elif(attempts >=5 and attempts <=6):
+        message = "Warning more than 7 attemps will terminate your transaction, wait till "
+
+        timer = 120
+    elif(attempts >= 7):
+        print("Program terminated")
+        exit(0)
+    else:
+        login(acc_no)
+        return
+
+    while timer > 0:
+        system("cls")
+        view.logo()
+        print(message)
+        print("{} seconds".format(timer))
+        sleep(1)
+        timer-=1
+
+    login(acc_no)
 
 
 
@@ -51,26 +91,26 @@ def registerMenu():
     print("[1] Balance Inquiry")
     print("[2] Deposit")
     print("[3] Quick Cash")
-    print("[4] Widthdraw")
+    print("[4] Withdraw")
     print("[5] Fund Transfer")
     print("[6] Setting")
     print("[7] End of Transaction")
     choosen = input("Choice>>> ")
 
     if choosen == "1":
-        view_balance()
+        trans_verify(view_balance)
     elif choosen == "2":
-        deposit()
+        trans_verify(deposit)
     elif choosen == "3":
-        quick_cash()
+        trans_verify(quick_cash)
     elif choosen == "4":
-        widthdraw()
+        trans_verify(widthdraw)
     elif choosen == "5":
-        fund_transfer()
+        trans_verify(fund_transfer)
     elif choosen == "6":
-        setting()
+        trans_verify(setting)
     elif choosen == "7":
-        login()
+        ask_remove_card()
     else:
         utils.set_message("Invalid input please try again...", registerMenu)
 
@@ -122,7 +162,7 @@ def widthdraw():
 
 def quick_cash():
     view.header("QUICK CASH", active.get_fullname())
-    print("[1] 500  [2] 1000    [3] 2000    [4] 3000    [4] 10,000")
+    print("[1] 500  [2] 1000    [3] 2000    [4] 3000    [5] 10,000")
     chosen = input("Enter chosen number >>>")
     cash = 0
     if chosen == "1":
@@ -187,19 +227,22 @@ def setting():
     choosen = input("Choice: ")
 
     if choosen == "1":
-        change_pin()
+        trans_verify(change_pin)
     elif choosen == "2":
         registerMenu()
 
 
 def change_pin():
     view.header("CHANGE PIN", active.get_fullname())
-    cur_pin = input("Enter the current pin: ")
+    print("Enter your current pin to verify")
+    cur_pin = inp.pin_getter()
 
     utils.ask_continue()
     if cur_pin == decrpyt(active.pin):
-        new_pin = input("Enter the new pin: ")
-        re_pin = input("Enter the re-enter pin: ")
+        print("\nEnter your new pin")
+        new_pin = inp.pin_getter()
+        print("\nRe-enter your pin")
+        re_pin = inp.pin_getter()
 
         if new_pin == re_pin and crud.update_pin(active.accno, new_pin):
             utils.set_message("Pin successfully changed", ask_remove_card)

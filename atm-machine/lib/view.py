@@ -9,6 +9,7 @@ current_time = now.strftime("%d/%m/%Y %H:%M:%S")
 
 
 def receipt(active, mode, trans_acc, amount):
+    # print('\n'*5)
     system("cls")
     balance = float(active.balance)
     print("===================================================")
@@ -43,6 +44,8 @@ def receipt(active, mode, trans_acc, amount):
 
 
 def logo():
+    # print('\n' * 30)
+    system("cls")
     print("=======================================")
     print("  ████████╗    ██████╗     ██████╗ ")
     print("  ╚══██╔══╝    ██╔══██╗    ██╔══██╗")
@@ -56,6 +59,7 @@ def logo():
 
 
 def header(title,fullname):
+    # print('\n' * 30)
     system("cls")
     print("\n=====================================================================")
     print(config.CMPY_NAME.upper())

@@ -1,6 +1,6 @@
 import os, string, time
 from ctypes import windll
-import config
+import config, view
 
 def get_driveStatus():
     devices = []
@@ -15,6 +15,8 @@ def get_driveStatus():
 
 def detect_device():
     original = set(get_driveStatus())
+    os.system("cls")
+    view.logo()
     print('Please insert or re-insert your card...')
     time.sleep(2)
     add_device = set(get_driveStatus()) - original
@@ -28,6 +30,8 @@ def detect_device():
 
 def detect_remove():
     original = set(get_driveStatus())
+    os.system("cls")
+    view.logo()
     print('Please remove your card...')
     time.sleep(2)
     subt_device = original - set(get_driveStatus())
